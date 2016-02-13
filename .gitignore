@@ -1,0 +1,11 @@
+# Ignore builds
+*.aux
+*.bcf
+*.log
+*.run.xml
+*.fls
+*.fdb_latexmk
+
+# Ignore gedit and vim's temporary files
+*~
+*.swp

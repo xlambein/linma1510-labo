@@ -1,0 +1,104 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[in]{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+\usepackage{tikz}
+\usepackage{graphicx,circuitikz,pgfplots}
+\usepackage{tabu,booktabs}
+\usepackage{enumitem}
+\usepackage{amsmath,amsthm,amsfonts}
+\usepackage[squaren,thinspace]{SIunits}
+\usepackage[version=3]{mhchem}
+\usepackage{bookmark}
+\bookmarksetup{numbered,open}
+\usepackage[official]{eurosym}
+\usepackage{listings}
+\usepackage{float}
+
+\newcommand{\equil}[1]{\bar{#1}}
+\renewcommand{\d}{\mathrm{d}}
+
+\author{Geoffroy Jacquet \and Xavier Lambein}
+\title{Linear Control\\Laboratory report 1}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{Question 1} Explain the chosen values for $\equil{q_{P3}}$ and $\equil{h_3}$. Explain the calculation of the surface $S_{S30}$.
+
+We define $\equil{q_{P3}}$ to be the (constant) flow rate chosen for the open loop experiment (i.e. 30\milli\liter\per\second) and $\equil{h_3}$ to be the value of $h_3$ when the water has stabilized in the third tank. This corresponds to an equilibrium for $h_3$.
+
+In a state of equilibrium, $h_3$ is constant and thus:
+\[
+    \frac{\d\equil{h_3}}{\d{t}} = 0
+    \text.
+\]
+From that last equation and the model of the system, we can derive the value of $S_{S30}$:
+\begin{align*}
+    \frac{\d\equil{h_3}}{\d{t}} = 0 = \frac{1}{S_R} \equil{q_{P3}} - \frac{1}{S_R} \equil{q_{S30}}
+    &\Leftrightarrow \frac{1}{S_R} \equil{q_{P3}} = \frac{1}{S_R} \equil{q_{S30}} \\
+    &\Leftrightarrow \equil{q_{P3}} = \equil{q_{S30}} \\
+    &\Leftrightarrow \equil{q_{P3}} = S_{S30} \sqrt{2g\equil{h_3}} \\
+    &\Leftrightarrow S_{S30} = \frac{\equil{q_{P3}}}{\sqrt{2g\equil{h_3}}}
+\end{align*}
+
+This gives us the following experimental values:
+\begin{center}
+\begin{tabular}{ccc}
+    $\equil{q_{P3}}$ & $\equil{h_3}$ & $S_{S30}$ \\
+    \hline
+    & &
+\end{tabular}
+\end{center}
+
+\paragraph{Question 2} Detail the linearized model of the system and the transfer functions of $G(s)$ and $H(s)$.
+
+Let us first identify the input, disturbance, inner state and output of the system:
+\begin{center}
+\begin{tabular}{lcccc}
+    & \textbf{Input} & \textbf{Disturbance} & \textbf{Inner state} & \textbf{Output} \\
+    \hline
+    \textbf{Variable} & $q_{P3}$ & $S_{F30}$ & $h_3$ & $h_3$ \\
+    \hline
+    \textbf{Alias} & $u$ & $v$ & $x$ & $y$
+\end{tabular}
+\end{center}
+For clarity, we shall use the ``Alias'' notation for these variables. The (nonlinear) system for this experiment is thus:
+\begin{align*}
+    \dot{x} &= \frac{S_{S30}}{S_R} \sqrt{2gx} + \frac{1}{S_R} u - \frac{1}{S_R} v \sqrt{2gx} \\
+    y &= x
+    \text.
+\end{align*}
+
+We can obtain a linear system by doing an approximation using the first order Taylor series centered around the equilibrium on the right-hand side of the first equation. Let us begin by computing the gradiant of $\dot{x}$ with respect to $(x, u, v)$:
+\[
+    \nabla_{(x, u, v)}\dot{x} = \left(
+        \frac{S_{S30} - v}{S_R} \sqrt{\frac{g}{2x}},
+        \frac{1}{S_R},
+        - \frac{\sqrt{2gx}}{S_R}
+    \right)
+    \text.
+\]
+The linearization of the system is then given by the Taylor series:
+\begin{align*}
+    \dot{x}
+    &\approx \nabla_{(x, u, v)}\dot{x}\rvert_{(x,u,v) = (\equil{x},\equil{u},\equil{v})} \bullet (x -\equil{x},u - \equil{u},v - \equil{v}) \\
+    &= \frac{S_{S30} - \equil{v}}{S_R} \sqrt{\frac{g}{2\equil{x}}} (x - \equil{x})
+     + \frac{1}{S_R} (u - \equil{u})
+     - \frac{\sqrt{2g\equil{x}}}{S_R} (v - \equil{v}) \\
+    &= \frac{S_{S30} - \equil{v}}{S_R} \sqrt{\frac{g}{2\equil{x}}} x
+     + \frac{1}{S_R} u - \frac{\sqrt{2g\equil{x}}}{S_R} v
+     + \frac{1}{S_R} \left( S_{S30} \sqrt{\frac{g\equil{x}}{2}}
+     + \equil{u}
+     - \sqrt{\frac{5g\equil{x}}{2}} \equil{v} \right)
+    \text.
+\end{align*}
+
+\end{document}
+
